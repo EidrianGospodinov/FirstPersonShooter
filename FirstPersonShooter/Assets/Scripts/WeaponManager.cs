@@ -10,6 +10,10 @@ public class WeaponManager : MonoBehaviour
     int gunDamage=100;
     public Animator weaponAnimator;
 
+    public ParticleSystem shootingEffect;
+
+    public GameObject shootFrom;
+
     // Start is called before the first frame update
     void Start()
     {
@@ -27,13 +31,16 @@ public class WeaponManager : MonoBehaviour
         //gets the shooting from inpuit axes
         if (Input.GetButtonDown("Fire1"))
         {
+            
             Shoot();
         }
     }
     void Shoot()
     {
         weaponAnimator.SetBool("isShooting", true);
+        shootingEffect.Play();
         RaycastHit hit;
+        
         //the raycast shoot form camera position, towards direction forwards, stores whatever has been hit in hit and specify the distance the bullet will travel
         if(Physics.Raycast(playerCam.transform.position, transform.forward, out hit, range))
         {
@@ -44,5 +51,7 @@ public class WeaponManager : MonoBehaviour
             }
 
         }
+        Instantiate(shootingEffect,shootFrom.transform.position , Quaternion.LookRotation(hit.normal));
+        
     }
 }
